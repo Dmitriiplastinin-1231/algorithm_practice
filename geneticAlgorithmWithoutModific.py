@@ -1,7 +1,5 @@
 import random
 import math
-import matplotlib.pyplot as plt
-
 
 
 #========================================
@@ -25,9 +23,6 @@ BORDER = [[-10, 10],[-10, 10]]
 #                FUNCTION
 #========================================
 FUNCTION = lambda x, y: -(math.fabs(    math.sin(x) * math.cos(y) * math.exp(math.fabs(1 - (((x**2 + y**2)**0.5)/math.pi)))     ))
-# FUNCTION = lambda x,y: (x-5.5)**4 + (y - 6.25)**2
-# FUNCTION = lambda x, y: math.sin(x+y) + (x-y)**2 - 1.5*x + 2.5*y + 1 
-# FUNCTION = lambda x,y: (x**4 - 16*x**2 + 5*x + y**4 - 16*y**2 + 5*y) /2
 
 
 #========================================
@@ -85,144 +80,163 @@ class Individual():
 #          Additional functions
 #========================================
 
-def oneMaxFitness(individual):
-    if ((not(BORDER[0][0] <= individual.x.floatNum() <= BORDER[0][1])) or  (not(BORDER[1][0] <= individual.y.floatNum() <= BORDER[1][1]))):
+def _oneMaxFitness(individual, border, function):
+    if ((not(border[0][0] <= individual.x.floatNum() <= border[0][1])) or  (not(border[1][0] <= individual.y.floatNum() <= border[1][1]))):
         return [math.inf]
-    return [FUNCTION(individual.x.floatNum(), individual.y.floatNum())]
+    return [function(individual.x.floatNum(), individual.y.floatNum())]
 
-def individualArgumentCreator():
+def _individualArgumentCreator():
     return ([random.randint(0, 1) for i in range(ONE_MAX_LENGTH)])
-    # return ([1]+[0 for i in range(ONE_MAX_LENGTH)])
 
-def populationCreator(n = 0):
-    return list([Individual([individualArgumentCreator(), individualArgumentCreator()]) for i in range(n)])
+def _populationCreator(n=0):
+    return list([Individual([_individualArgumentCreator(), _individualArgumentCreator()]) for i in range(n)])
 
-def clone (value):
-    # print(value.x.floatNum(), value.y.floatNum())
+def _clone(value):
     ind = Individual([value.x.floatNum(), value.y.floatNum()])
     ind.fitness.values[0] = value.fitness.values[0]
     return ind
 
-def selTournament(population, p_len):
+def _selTournament(population, p_len):
     offspring = []
     for n in range(p_len):
         i1 = i2 = i3 = 0
         while i1 == i2 or i1 == i3 or i2 == i3:
             i1, i2, i3 = random.randint(0, p_len - 1), random.randint(0, p_len - 1), random.randint(0, p_len - 1)
-
         offspring.append(min([population[i1], population[i2], population[i3]], key=lambda ind: ind.fitness.values[0]))
-
     return offspring
 
-def antiElitism(population, n=0):
+def _antiElitism(population, elitism_count):
     offspring = sorted(population, key=lambda ind: ind.fitness.values[0])
-    return offspring[:ELITISM_COUNT]
-    
+    return offspring[:elitism_count]
 
-def cxOnePoint(child1, child2):
+def _cxOnePoint(child1, child2):
     s1 = random.randint(1, len(child1.x)-2)
     s2 = random.randint(1, len(child1.y)-2)
     child1.x[s1:], child2.x[s1:] = child2.x[s1:], child1.x[s1:]
     child1.y[s2:], child2.y[s2:] = child2.y[s2:], child1.y[s2:]
 
-def mutFlipBit(mutant, indpb=0.01):
+def _mutFlipBit(mutant, indpb=0.01):
     for indx in range(len(mutant)):
         if random.random() < indpb:
             mutant[indx] = 0 if mutant[indx] == 1 else 1
 
-# def lookBorder(population, border):
-#     for ind in population:
-#         if (border[0][0] < ind.x.floatNum()):
-#             ind.x = DoubleArgument(border[0][0])
-#         elif (border[0][1] > ind.x.floatNum()):
-#             ind.x = DoubleArgument(border[0][1])
 
-#         if (border[1][0] < ind.y.floatNum()):
-#             ind.y = DoubleArgument(border[1][0])
-#         elif (border[1][1] > ind.y.floatNum()):
-#             ind.y = DoubleArgument(border[1][1])
+#========================================
+#          Public run function
+#========================================
 
-    
+def run_genetic_algorithm(
+    population_size=POPULATION_SIZE,
+    p_crossover=P_CROSSOVER,
+    p_mutation=P_MUTATION,
+    max_generations=MAX_GENERATIONS,
+    elitism_count=ELITISM_COUNT,
+    border=None,
+    function=None,
+    on_progress=None,
+):
+    """
+    Run the genetic algorithm and return statistics.
+
+    Parameters
+    ----------
+    population_size : int
+    p_crossover : float
+    p_mutation : float
+    max_generations : int
+    elitism_count : int
+    border : list, optional  [[xmin, xmax], [ymin, ymax]]
+    function : callable, optional  f(x, y) -> float
+    on_progress : callable, optional  on_progress(generation, best, mean, best_x, best_y)
+
+    Returns
+    -------
+    dict with keys: best_fitness_history, mean_fitness_history,
+                    best_x_history, best_y_history, best_x, best_y, best_value
+    """
+    if border is None:
+        border = BORDER
+    if function is None:
+        function = FUNCTION
+
+    population = _populationCreator(n=population_size)
+    generationCounter = 0
+
+    fitnessValues = [_oneMaxFitness(ind, border, function) for ind in population]
+    for individual, fitnessValue in zip(population, fitnessValues):
+        individual.fitness.values = fitnessValue
+
+    best_fitness_history = []
+    mean_fitness_history = []
+    best_x_history = []
+    best_y_history = []
+
+    fitnessValues = [individual.fitness.values[0] for individual in population]
+
+    while generationCounter < max_generations:
+        generationCounter += 1
+        offspring = _selTournament(population, len(population) - elitism_count)
+        offspring += _antiElitism(population, elitism_count)
+        offspring = list(map(_clone, offspring))
+
+        for child1, child2 in zip(offspring[::2], offspring[1::2]):
+            if random.random() < p_crossover:
+                _cxOnePoint(child1, child2)
+
+        for mutant in offspring:
+            if random.random() < p_mutation:
+                _mutFlipBit(mutant.x, indpb=1.0 / ONE_MAX_LENGTH)
+                _mutFlipBit(mutant.y, indpb=1.0 / ONE_MAX_LENGTH)
+
+        freshFitnessValues = [_oneMaxFitness(ind, border, function) for ind in offspring]
+        for individual, fitnessValue in zip(offspring, freshFitnessValues):
+            individual.fitness.values = fitnessValue
+
+        population[:] = offspring
+        fitnessValues = [ind.fitness.values[0] for ind in population]
+
+        bestFitness = min(fitnessValues)
+        meanFitness = sum(fitnessValues) / len(population)
+        best_index = fitnessValues.index(bestFitness)
+
+        best_fitness_history.append(bestFitness)
+        mean_fitness_history.append(meanFitness)
+        best_x_history.append(population[best_index].x.floatNum())
+        best_y_history.append(population[best_index].y.floatNum())
+
+        if on_progress is not None:
+            on_progress(
+                generationCounter,
+                bestFitness,
+                meanFitness,
+                population[best_index].x.floatNum(),
+                population[best_index].y.floatNum(),
+            )
+
+    best_index = fitnessValues.index(min(fitnessValues))
+    return {
+        "best_fitness_history": best_fitness_history,
+        "mean_fitness_history": mean_fitness_history,
+        "best_x_history": best_x_history,
+        "best_y_history": best_y_history,
+        "best_x": population[best_index].x.floatNum(),
+        "best_y": population[best_index].y.floatNum(),
+        "best_value": min(fitnessValues),
+    }
+
 
 #========================================
 #                 Main
 #========================================
 
-population = populationCreator(n=POPULATION_SIZE)
-# lookBorder(population, BORDER)
-generationCounter = 0
+if __name__ == '__main__':
+    def _print_progress(gen, best, mean, bx, by):
+        if gen % OUTPUT_FREQUENCE == 0:
+            print("=" * 60)
+            print(f'Поколение {gen}: Макс приспособ. = {best:.6f}, Средняя приспособ.= {mean:.6f}')
+            print(f"Лучший индивидуум = {bx:.6f}, {by:.6f}")
+            print("=" * 60)
+            print()
 
-fitnessValues = list(map(oneMaxFitness, population))
-
-for individual, fitnessValue in zip(population, fitnessValues):
-    individual.fitness.values = fitnessValue
-
-maxFitnessValues = []
-meanFitnessValues = []
-maxFitnessCoordinatesX = []
-maxFitnessCoordinatesY = []
-
-fitnessValues = [individual.fitness.values[0] for individual in population]
-
-
-# max(fitnessValues) < ONE_MAX_LENGTH and 
-while generationCounter < MAX_GENERATIONS:
-    generationCounter += 1
-    offspring = selTournament(population, len(population)-ELITISM_COUNT)
-    offspring += antiElitism(population, ELITISM_COUNT)
-    offspring = list(map(clone, offspring))
-
-    for child1, child2 in zip (offspring[::2], offspring[1::2]):
-        if random.random() < P_CROSSOVER:
-            cxOnePoint(child1, child2)
-
-    for mutant in offspring:
-        if random.random() < P_MUTATION:
-            mutFlipBit(mutant.x, indpb = 1.0/ONE_MAX_LENGTH)
-
-            mutFlipBit(mutant.y, indpb = 1.0/ONE_MAX_LENGTH)
-
-    # lookBorder(offspring, BORDER)
-
-    freshFitnessValues = list(map(oneMaxFitness, offspring))
-    for individual,fitnessValue in zip(offspring, freshFitnessValues):
-        individual.fitness.values = fitnessValue
-
-    population[:] = offspring
-    # print([[ind.x.floatNum(), ind.y.floatNum()] for ind in population])
-    fitnessValues = [ind.fitness.values[0] for ind in population]
-
-    maxFitness = min(fitnessValues)
-    meanFitness = sum(fitnessValues) / len(population)
-    maxFitnessValues.append(maxFitness)
-    meanFitnessValues.append(meanFitness)
-
-    best_index = fitnessValues.index(min(fitnessValues))
-    maxFitnessCoordinatesX.append(population[best_index].x.floatNum())
-    maxFitnessCoordinatesY.append(population[best_index].y.floatNum())
-
-    if (generationCounter % OUTPUT_FREQUENCE == 0):
-        print("=" * 60)
-        print(f'Поколение {generationCounter}: Макс приспособ. = {maxFitness}, Средняя приспособ.= {meanFitness}')
-        print("Лучший индивидуум = ", population[best_index].x.floatNum(), ', ', population[best_index].y.floatNum())
-        print("=" * 60)
-        print('\n')
-
-
-
-#========================================
-#                Graph
-#========================================
-
-
-plt.scatter(maxFitnessCoordinatesX, maxFitnessCoordinatesY, color='red', label='Точки')
-
-# Настройка (необязательно)
-plt.title('График с N точками')
-plt.xlabel('Ось X')
-plt.ylabel('Ось Y')
-plt.grid(True)
-plt.legend()
-
-# Показать график
-plt.show()
+    result = run_genetic_algorithm(on_progress=_print_progress)
+    print(f"\nРезультат: f({result['best_x']:.6f}, {result['best_y']:.6f}) = {result['best_value']:.10f}")
