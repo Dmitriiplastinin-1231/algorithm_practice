@@ -77,6 +77,7 @@ class PSO:
 
         
         self.history: List[float] = []
+        self.positions_history: List[List[List[float]]] = []
 
     # ==========================================
     #              Основной цикл
@@ -92,6 +93,7 @@ class PSO:
 
             self._evaluate_swarm()
             self.history.append(self.global_best_value)
+            self.positions_history.append([list(p.position) for p in self.swarm])
 
             if verbose and (
                 iteration % max(1, self.max_iterations // 10) == 0
