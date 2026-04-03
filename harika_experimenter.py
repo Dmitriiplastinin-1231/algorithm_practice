@@ -27,7 +27,7 @@ P_MUTATION = 0.0        # мутация отключена
 ELITISM_COUNT = 0       # элитизм отключён
 MAX_GENERATIONS = 300   # число поколений
 
-SUCCESS_THRESHOLD = -19.0   # порог успеха: значение функции ниже -19
+SUCCESS_THRESHOLD = -19.0   # порог успеха: значение функции строго ниже -19.0
 RUNS_PER_N = 100            # число независимых запусков для каждого N
 
 # Исследуемые размеры популяции
@@ -37,6 +37,9 @@ OUTPUT_FILE = "harika_results.png"
 
 
 def run_experiment():
+    if RUNS_PER_N <= 0:
+        raise ValueError("RUNS_PER_N должен быть положительным числом.")
+
     print("=" * 60)
     print("Эксперимент: проверка теории Харика")
     print(f"  p_crossover    = {P_CROSSOVER}")
