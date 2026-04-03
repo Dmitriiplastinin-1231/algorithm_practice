@@ -46,7 +46,7 @@ def plot_results(success_rates):
     ax.plot(PM_VALUES, success_rates, marker="o", linewidth=2, markersize=7, color="steelblue")
     ax.axhline(y=max(success_rates), color="gray", linestyle="--", linewidth=1, label=f"макс. {max(success_rates):.2f}")
 
-    best_pm = PM_VALUES[int(np.argmax(success_rates))]
+    best_pm = PM_VALUES[np.argmax(success_rates)]
     ax.axvline(x=best_pm, color="tomato", linestyle="--", linewidth=1, label=f"лучший Pm = {best_pm:.2f}")
 
     ax.set_xlabel("Вероятность мутации (Pm)", fontsize=13)
