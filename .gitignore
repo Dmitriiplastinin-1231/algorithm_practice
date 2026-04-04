@@ -1,2 +1,6 @@
 __pycache__
 crossover_experiment.png
+elitism_experiment.png
+mutation_experiment.png
+swarm_size_experiment.png
+swarm_size_experiment.csv
