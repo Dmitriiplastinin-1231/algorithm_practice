@@ -134,6 +134,7 @@ def run_genetic_algorithm(
     border=None,
     function=None,
     on_progress=None,
+    convergence_threshold=None,
 ):
     """
     Run the genetic algorithm and return statistics.
@@ -148,11 +149,16 @@ def run_genetic_algorithm(
     border : list, optional  [[xmin, xmax], [ymin, ymax]]
     function : callable, optional  f(x, y) -> float
     on_progress : callable, optional  on_progress(generation, best, mean, best_x, best_y)
+    convergence_threshold : float, optional
+        If provided, the generation at which best fitness first drops below this
+        value is recorded as ``convergence_generation`` in the returned dict.
+        ``None`` means convergence is not tracked.
 
     Returns
     -------
     dict with keys: best_fitness_history, mean_fitness_history,
-                    best_x_history, best_y_history, best_x, best_y, best_value
+                    best_x_history, best_y_history, best_x, best_y, best_value,
+                    convergence_generation (int or None)
     """
     if border is None:
         border = BORDER
@@ -170,23 +176,31 @@ def run_genetic_algorithm(
     mean_fitness_history = []
     best_x_history = []
     best_y_history = []
+    convergence_generation = None
 
     fitnessValues = [individual.fitness.values[0] for individual in population]
 
     while generationCounter < max_generations:
         generationCounter += 1
-        offspring = _selTournament(population, len(population) - elitism_count)
-        offspring += _antiElitism(population, elitism_count)
-        offspring = list(map(_clone, offspring))
 
-        for child1, child2 in zip(offspring[::2], offspring[1::2]):
+        # Select non-elite individuals via tournament, then clone elites unchanged.
+        non_elite = _selTournament(population, len(population) - elitism_count)
+        elites = _antiElitism(population, elitism_count)
+
+        # Apply crossover and mutation only to the non-elite portion.
+        non_elite = list(map(_clone, non_elite))
+
+        for child1, child2 in zip(non_elite[::2], non_elite[1::2]):
             if random.random() < p_crossover:
                 _cxOnePoint(child1, child2)
 
-        for mutant in offspring:
+        for mutant in non_elite:
             if random.random() < p_mutation:
                 _mutFlipBit(mutant.x, indpb=1.0 / ONE_MAX_LENGTH)
                 _mutFlipBit(mutant.y, indpb=1.0 / ONE_MAX_LENGTH)
+
+        # Elites are cloned but not modified.
+        offspring = non_elite + list(map(_clone, elites))
 
         freshFitnessValues = [_oneMaxFitness(ind, border, function) for ind in offspring]
         for individual, fitnessValue in zip(offspring, freshFitnessValues):
@@ -203,6 +217,13 @@ def run_genetic_algorithm(
         mean_fitness_history.append(meanFitness)
         best_x_history.append(population[best_index].x.floatNum())
         best_y_history.append(population[best_index].y.floatNum())
+
+        if (
+            convergence_generation is None
+            and convergence_threshold is not None
+            and bestFitness < convergence_threshold
+        ):
+            convergence_generation = generationCounter
 
         if on_progress is not None:
             on_progress(
@@ -222,6 +243,7 @@ def run_genetic_algorithm(
         "best_x": population[best_index].x.floatNum(),
         "best_y": population[best_index].y.floatNum(),
         "best_value": min(fitnessValues),
+        "convergence_generation": convergence_generation,
     }
 
 
