@@ -269,9 +269,9 @@ def plot_results(results: list) -> None:
 #  Точка входа
 # ========================================================
 if __name__ == "__main__":
-    C1_VALUES = _make_range(C1_START, C1_STOP, C1_STEP)
-    C2_VALUES = _make_range(C2_START, C2_STOP, C2_STEP)
-    valid_pairs = sum(1 for c1 in C1_VALUES for c2 in C2_VALUES if c1 + c2 > 4.0)
+    _c1 = _make_range(C1_START, C1_STOP, C1_STEP)
+    _c2 = _make_range(C2_START, C2_STOP, C2_STEP)
+    valid_pairs = sum(1 for c1 in _c1 for c2 in _c2 if c1 + c2 > 4.0)
 
     print("=" * 70)
     print("  Эксперимент: перебор всех комбинаций (c1, c2) для PSO")
