@@ -1,0 +1,110 @@
+<mxfile host="app.diagrams.net" modified="2026-04-18T09:37:19.116Z" agent="Copilot" version="24.7.17" editor="www.diagrams.net" type="device">
+  <diagram id="ga-elitism" name="Страница 1">
+    <mxGraphModel dx="1420" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="start" value="Старт" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="40" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="input" value="Ввод параметров алгоритма" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="395" y="140" width="250" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="init" value="Создание начальной популяции" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="250" width="300" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="fitness0" value="Оценка приспособленности особей" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="360" width="320" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="loop" value="Цикл по поколениям" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="470" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="selection" value="Селекция" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="570" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="crossover" value="Скрещивание" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="670" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="mutation" value="Мутация" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="770" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="offspringFitness" value="Оценка приспособленности потомков" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="870" width="340" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="elitismDecision" value="Элитизм? (да/нет)" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="980" width="190" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="elitismYes" value="Сохранить top-k лучших особей (элита) и перенести в новую популяцию" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1000" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="update" value="Обновление популяции" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1140" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="continue" value="Продолжать цикл по поколениям?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="1260" width="220" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="output" value="Вывод лучшего решения" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="1430" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="end" value="Конец" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1540" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=block;html=1;" edge="1" parent="1" source="start" target="input">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;" edge="1" parent="1" source="input" target="init">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;" edge="1" parent="1" source="init" target="fitness0">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;" edge="1" parent="1" source="fitness0" target="loop">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" style="endArrow=block;html=1;" edge="1" parent="1" source="loop" target="selection">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" style="endArrow=block;html=1;" edge="1" parent="1" source="selection" target="crossover">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" style="endArrow=block;html=1;" edge="1" parent="1" source="crossover" target="mutation">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" style="endArrow=block;html=1;" edge="1" parent="1" source="mutation" target="offspringFitness">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" style="endArrow=block;html=1;" edge="1" parent="1" source="offspringFitness" target="elitismDecision">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" value="да" style="endArrow=block;html=1;" edge="1" parent="1" source="elitismDecision" target="elitismYes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" value="нет" style="endArrow=block;html=1;" edge="1" parent="1" source="elitismDecision" target="update">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" style="endArrow=block;html=1;" edge="1" parent="1" source="elitismYes" target="update">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e13" style="endArrow=block;html=1;" edge="1" parent="1" source="update" target="continue">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" value="да" style="endArrow=block;html=1;" edge="1" parent="1" source="continue" target="selection">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="1320"/>
+              <mxPoint x="730" y="600"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" value="нет" style="endArrow=block;html=1;" edge="1" parent="1" source="continue" target="output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e16" style="endArrow=block;html=1;" edge="1" parent="1" source="output" target="end">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
