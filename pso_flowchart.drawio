@@ -63,8 +63,8 @@
         <mxCell id="e4" edge="1" parent="1" source="eval0" target="iter" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
 
         <mxCell id="e5" value="да" edge="1" parent="1" source="iter" target="useChi" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e6" value="Да" edge="1" parent="1" source="useChi" target="velChi" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e7" value="Нет" edge="1" parent="1" source="useChi" target="velW" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="да" edge="1" parent="1" source="useChi" target="velChi" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="нет" edge="1" parent="1" source="useChi" target="velW" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
 
         <mxCell id="e8" edge="1" parent="1" source="velChi" target="pos" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e9" edge="1" parent="1" source="velW" target="pos" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
