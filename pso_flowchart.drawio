@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" modified="2026-04-18T09:48:52.225Z" agent="Mozilla/5.0" version="24.7.17" type="device">
+  <diagram id="pso-flow" name="Page-1">
+    <mxGraphModel dx="1338" dy="768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="start" value="начало" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="20" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="input" value="ввод параметров и расчет chi (сжатие)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="110" width="440" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="init" value="инициализация частиц роя" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="220" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="eval0" value="первичная оценка" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="320" width="300" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="iter" value="цикл по итерациям?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="430" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="useChi" value="использовать коэф. сжатия?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="610" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="velChi" value="обновление скорости с коэф. сжатия (chi)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="770" width="390" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="velW" value="обновление скорости с весом инерции (w)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="770" width="390" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pos" value="обновление позиции частиц" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="900" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="bounds" value="проверка границ и переоценка" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="1000" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="bests" value="обновление лучших значений (pers/global)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1100" width="420" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="output" value="вывод лучшего решения" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="1290" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="end" value="конец" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1400" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" edge="1" parent="1" source="start" target="input" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="input" target="init" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="init" target="eval0" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="eval0" target="iter" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e5" value="да" edge="1" parent="1" source="iter" target="useChi" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="Да" edge="1" parent="1" source="useChi" target="velChi" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="Нет" edge="1" parent="1" source="useChi" target="velW" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e8" edge="1" parent="1" source="velChi" target="pos" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="velW" target="pos" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="pos" target="bounds" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="bounds" target="bests" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e12" value="возврат к циклу" edge="1" parent="1" source="bests" target="iter" style="endArrow=block;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="1135"/>
+              <mxPoint x="230" y="490"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e13" value="нет" edge="1" parent="1" source="iter" target="output" style="endArrow=block;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="910" y="490"/>
+              <mxPoint x="910" y="1325"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e14" edge="1" parent="1" source="output" target="end" style="endArrow=block;html=1;"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
